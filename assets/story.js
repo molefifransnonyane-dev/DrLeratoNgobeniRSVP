@@ -1,8 +1,68 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   /* ---------- preloader ---------- */
   const preloader = document.querySelector('.preloader');
   if (preloader) setTimeout(() => preloader.classList.add('hidden'), 1800);
+
+  /* ---------- scroll-linked parallax variable (hero decorative shapes) ---------- */
+  if (!reducedMotion) {
+    document.addEventListener('scroll', () => {
+      document.documentElement.style.setProperty('--scrollY', window.scrollY);
+    }, { passive: true });
+  }
+
+  /* ---------- 3D tilt on hover/touch — photos and cards feel alive, not static ---------- */
+  if (!reducedMotion) {
+    const tiltEls = document.querySelectorAll(
+      '.bio-photo, .bio-photo-inset, .gallery-item, .value-card, .tl-card, .contact-card, .hero-photo-frame'
+    );
+    const applyTilt = (el, clientX, clientY) => {
+      const rect = el.getBoundingClientRect();
+      const px = (clientX - rect.left) / rect.width;
+      const py = (clientY - rect.top) / rect.height;
+      const rotateY = (px - 0.5) * 12;
+      const rotateX = (0.5 - py) * 12;
+      el.style.transition = 'transform .08s ease';
+      el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) scale(1.015)`;
+    };
+    const resetTilt = (el) => {
+      el.style.transition = 'transform .6s cubic-bezier(.22,1,.36,1)';
+      el.style.transform = '';
+    };
+    tiltEls.forEach(el => {
+      el.classList.add('tilt-el');
+      el.addEventListener('mousemove', (e) => applyTilt(el, e.clientX, e.clientY));
+      el.addEventListener('mouseleave', () => resetTilt(el));
+      el.addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        if (t) applyTilt(el, t.clientX, t.clientY);
+      }, { passive: true });
+      el.addEventListener('touchmove', (e) => {
+        const t = e.touches[0];
+        if (t) applyTilt(el, t.clientX, t.clientY);
+      }, { passive: true });
+      el.addEventListener('touchend', () => resetTilt(el));
+    });
+  }
+
+  /* ---------- button ripple: tactile click feedback ---------- */
+  if (!reducedMotion) {
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height) * 1.6;
+        const ripple = document.createElement('span');
+        ripple.className = 'btn-ripple';
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+        ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+        btn.appendChild(ripple);
+        ripple.addEventListener('animationend', () => ripple.remove());
+      });
+    });
+  }
 
   /* ---------- celebrate button: brief confetti flourish ---------- */
   const celebrateBtn = document.getElementById('celebrateBtn');
@@ -253,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return valid;
     };
 
-    var LIVE_HOSTS = ['drleratongobenirsvp.lailai.co.za', 'www.drleratongobenirsvp.lailai.co.za', 'manager.lailai.co.za'];
+    var LIVE_HOSTS = ['manager.lailai.co.za'];
     var isLiveSite = LIVE_HOSTS.indexOf(window.location.hostname) !== -1;
 
     form.addEventListener('submit', async (e) => {

@@ -225,10 +225,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 /* ---------- biography ---------- */
 .bio{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:start;margin-top:56px}
+@media (min-width:901px){.bio{align-items:stretch}}
 @media (max-width:900px){.bio{grid-template-columns:1fr;gap:36px}}
 .bio-photo-group{position:relative;padding-bottom:48px;padding-right:36px}
 .bio-photo{position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-card)}
 .bio-photo img{width:100%;display:block;object-fit:cover;aspect-ratio:3/4}
+@media (min-width:901px){
+  .bio-photo-group{height:100%}
+  .bio-photo{height:100%}
+  .bio-photo img{height:100%;aspect-ratio:auto}
+}
 .bio-photo-inset{
   position:absolute;right:0;bottom:0;z-index:3;width:46%;max-width:220px;
   border-radius:var(--radius-sm);overflow:hidden;border:6px solid var(--white);

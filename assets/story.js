@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return valid;
     };
 
-    var LIVE_HOSTS = ['manager.lailai.co.za'];
+    var LIVE_HOSTS = ['drleratongobenirsvp.lailai.co.za', 'www.drleratongobenirsvp.lailai.co.za', 'manager.lailai.co.za'];
     var isLiveSite = LIVE_HOSTS.indexOf(window.location.hostname) !== -1;
 
     form.addEventListener('submit', async (e) => {

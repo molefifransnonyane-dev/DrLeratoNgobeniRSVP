@@ -26,6 +26,7 @@ function page_head(string $title): void
         . '<meta name="viewport" content="width=device-width, initial-scale=1">'
         . '<meta name="robots" content="noindex, nofollow">'
         . '<title>' . h($title) . '</title>'
+        . '<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%23fbf6f3%27 stroke=%27%23c69a3e%27 stroke-width=%273%27/%3E%3Ctext x=%2732%27 y=%2740%27 text-anchor=%27middle%27 font-family=%27Georgia,serif%27 font-size=%2724%27 fill=%27%23c69a3e%27%3ELN%3C/text%3E%3C/svg%3E">'
         . '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
         . '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Italiana&family=Poppins:wght@400;500;600&display=swap">'
         . '<link rel="stylesheet" href="admin.css?v=' . $css . '">'
@@ -161,9 +162,9 @@ if ($user === null || !isset(all_users()[$user])) {
     ?>
     <main class="login-wrap">
       <form class="login-card" method="post" action="index.php" autocomplete="on">
-        <div class="mark" aria-hidden="true">L N</div>
-        <h1>RSVP Admin</h1>
-        <p class="sub">Dr Lerato Ngobeni &middot; Graduation Party</p>
+        <span class="brand-mark brand-mark-lg" aria-hidden="true">LN</span>
+        <h1>Dr Lerato Ngobeni</h1>
+        <p class="sub">RSVP Admin &middot; Graduation Party</p>
         <?php if ($error !== '') { echo '<div class="flash flash-err" role="alert">' . h($error) . '</div>'; } ?>
         <?= csrf_field() ?>
         <label for="username">Username</label>
@@ -315,7 +316,7 @@ page_head('RSVP Admin — Dr Lerato Ngobeni');
 <header class="topbar">
   <div class="topbar-in">
     <div class="brand"><span class="brand-mark" aria-hidden="true">LN</span>
-      <span class="brand-text"><strong>RSVP Admin</strong><small>Dr Lerato Ngobeni &middot; Graduation Party &middot; 28 Nov 2026</small></span></div>
+      <span class="brand-copy"><strong>Dr Lerato Ngobeni</strong><span>RSVP Admin &middot; 28 Nov 2026</span></span></div>
     <div class="topbar-actions">
       <span class="who">Signed in as <b><?= h($user) ?></b></span>
       <a class="btn btn-ghost" href="index.php?a=export">Export CSV</a>

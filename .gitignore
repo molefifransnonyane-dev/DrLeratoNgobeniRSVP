@@ -5,3 +5,6 @@
 Thumbs.db
 .DS_Store
 desktop.ini
+
+# Runtime RSVP data and admin accounts live on the server only
+data/

@@ -9,7 +9,7 @@
 <meta property="og:description" content="A journey of vision, leadership and service in water, sanitation and municipal engineering. 28 November 2026, 6:30 PM, Courtyard Hotel Waterfall City.">
 <meta property="og:image" content="assets/lerato-hero.jpg">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/story.css?v=11">
+<link rel="stylesheet" href="assets/story.css?v=12">
 </head>
 <body data-event-date="2026-11-28T18:30:00+02:00">
 
@@ -289,8 +289,8 @@
     </div>
     <div class="container">
       <div class="rsvp-card reveal">
-        <form id="rsvpForm" action="https://formspree.io/f/xnpjywwo" method="POST" novalidate>
-          <input type="hidden" name="_subject" value="RSVP — Dr Lerato Ngobeni's Doctoral Celebration">
+        <form id="rsvpForm" action="api/rsvp.php" method="POST" novalidate>
+          <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
           <input type="hidden" name="Attending" id="attendingField" value="Yes">
 
           <div class="attend-toggle" role="group" aria-label="Will you attend?">
@@ -381,7 +381,7 @@
   <div class="container">
     <p class="fine">Dr Lerato Ngobeni &middot; 28 November 2026 &middot; Courtyard Hotel Waterfall City</p>
     <p class="verse">"For I know the plans I have for you," declares the Lord &mdash; Jeremiah 29:11</p>
-    <p class="fine" style="margin-top:14px;opacity:.55;font-size:10.5px">Music: "Aria" (J.S. Bach, Goldberg Variations) performed by Kimiko Ishizaka &middot; Public Domain</p>
+    <p class="fine" style="margin-top:14px;opacity:.55;font-size:10.5px"><a href="admin/" rel="nofollow">Host login</a> &middot; Music: "Aria" (J.S. Bach, Goldberg Variations) performed by Kimiko Ishizaka &middot; Public Domain</p>
   </div>
 </footer>
 
@@ -403,6 +403,6 @@
   <span class="music-toggle-label">Play Music</span>
 </button>
 
-<script src="assets/story.js?v=11"></script>
+<script src="assets/story.js?v=12"></script>
 </body>
 </html>

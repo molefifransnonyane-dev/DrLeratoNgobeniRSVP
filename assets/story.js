@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return valid;
     };
 
-    var LIVE_HOSTS = ['drleratongobenirsvp.lailai.co.za', 'www.drleratongobenirsvp.lailai.co.za', 'manager.lailai.co.za'];
+    var LIVE_HOSTS = ['drleratongobenirsvp.lailai.co.za', 'www.drleratongobenirsvp.lailai.co.za', 'manager.lailai.co.za', 'localhost', '127.0.0.1'];
     var isLiveSite = LIVE_HOSTS.indexOf(window.location.hostname) !== -1;
 
     form.addEventListener('submit', async (e) => {
@@ -352,7 +352,9 @@ document.addEventListener('DOMContentLoaded', () => {
           body: formData,
           headers: { 'Accept': 'application/json' }
         });
-        posted = res.ok;
+        let data = null;
+        try { data = await res.json(); } catch (parseErr) { data = null; }
+        posted = res.ok && !!data && data.ok === true;
       } catch (err) {
         posted = false;
       }

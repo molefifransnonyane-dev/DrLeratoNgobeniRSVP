@@ -61,3 +61,13 @@ GitHub repo → **Actions** tab → latest run. Green tick = live. Red cross = c
 - **FTP fails**: confirm the FTP account in cPanel is active and the GitHub Secrets match it exactly.
 - **Live site shows old content**: delete `.ftp-deploy-sync-state.json` from the document root via cPanel File Manager, then re-run the workflow to force a full re-upload.
 - **Browser shows old content**: hard refresh (`Ctrl+Shift+R` / `Cmd+Shift+R`).
+
+---
+
+## RSVP storage and admin dashboard (branch `admin-dashboard`, not live until merged to `main`)
+
+- `api/rsvp.php` receives form submissions and appends them to a file on the server. Visiting it in a browser (GET) returns `{"ok":true,"service":"rsvp"}`, a quick check that PHP is running.
+- `admin/` is the password-protected dashboard: list, search, filter, export CSV, add by hand, delete, import old Formspree RSVPs (CSV/JSON), change password.
+- `lib/` holds shared PHP and is blocked from the web by `.htaccess`.
+- `data/` is created by the server on first use and holds the RSVPs and password hashes. It is **never** in git and is **excluded from the FTP sync**, so deploys cannot overwrite or delete it. Back it up from cPanel File Manager if you want a copy.
+- Starter accounts `admin` and `host` use temporary passwords. Each person changes theirs from the dashboard; the new hash is stored only in `data/`.

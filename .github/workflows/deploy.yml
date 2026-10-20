@@ -28,6 +28,8 @@ jobs:
             .git/**
             .github/**
             .claude/**
+            data/**
+            data
             **/.DS_Store
             **/Thumbs.db
             **/desktop.ini
@@ -48,6 +50,8 @@ jobs:
             .git/**
             .github/**
             .claude/**
+            data/**
+            data
             **/.DS_Store
             **/Thumbs.db
             **/desktop.ini

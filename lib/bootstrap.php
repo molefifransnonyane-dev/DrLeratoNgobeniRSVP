@@ -493,3 +493,56 @@ function guest_count(string $g): int
 {
     return (int) rtrim($g, '+');
 }
+
+/* ---------- hidden programme page ---------- */
+
+function programme_file(): string
+{
+    return data_dir() . '/programme-' . data_key() . '.json';
+}
+
+/* Returns ['token'=>..., 'intro'=>..., 'items'=>[['time','title','details'],...]] and creates the secret token on first use. */
+function programme_load(): array
+{
+    $data = json_file_read(programme_file());
+    if (empty($data['token']) || !preg_match('/^[a-f0-9]{20}$/', (string) $data['token'])) {
+        $data['token'] = bin2hex(random_bytes(10));
+        $data += ['intro' => '', 'items' => []];
+        json_file_update(programme_file(), function (&$d) use ($data) {
+            $d = $data;
+        });
+    }
+    $data['intro'] = (string) ($data['intro'] ?? '');
+    $data['items'] = is_array($data['items'] ?? null) ? $data['items'] : [];
+    return $data;
+}
+
+function programme_save(string $intro, array $items): void
+{
+    $cur = programme_load();
+    json_file_update(programme_file(), function (&$d) use ($cur, $intro, $items) {
+        $d = ['token' => $cur['token'], 'intro' => $intro, 'items' => $items, 'updated' => time()];
+    });
+}
+
+function programme_new_token(): void
+{
+    $cur = programme_load();
+    json_file_update(programme_file(), function (&$d) use ($cur) {
+        $d = ['token' => bin2hex(random_bytes(10)), 'intro' => $cur['intro'], 'items' => $cur['items'], 'updated' => time()];
+    });
+}
+
+function base_url(): string
+{
+    $host = (string) ($_SERVER['HTTP_HOST'] ?? '');
+    if (!preg_match('/^[a-z0-9.\-]+(:\d+)?$/i', $host)) {
+        $host = SITE_HOST;
+    }
+    return (is_https() ? 'https' : 'http') . '://' . $host;
+}
+
+function programme_url(string $token): string
+{
+    return base_url() . '/programme/?k=' . $token;
+}

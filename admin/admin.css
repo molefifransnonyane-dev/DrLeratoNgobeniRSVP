@@ -142,6 +142,20 @@ textarea{resize:vertical}
   .grid-form{grid-template-columns:1fr}
 }
 
+/* programme tools */
+.btn-ghost-dark{background:transparent;color:var(--burgundy-deep);border-color:rgba(74,5,16,.35);text-decoration:none}
+.btn-ghost-dark:hover{background:var(--burgundy-deep);color:#fff;text-decoration:none}
+.prog-share{display:grid;grid-template-columns:240px 1fr;gap:26px;align-items:start;margin:18px 0 8px}
+.qr-box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;width:240px}
+.qr-box canvas{display:block;width:220px;height:220px;image-rendering:pixelated}
+.prog-link input{font-size:13px}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.prog-form{margin-top:22px;border-top:1px solid var(--line);padding-top:6px}
+.prog-h{font-family:var(--serif);font-size:1.3rem;color:var(--burgundy-deep);margin:22px 0 2px}
+.prog-row{display:grid;grid-template-columns:150px 1fr;gap:0 14px;padding:6px 0 12px;border-bottom:1px dashed var(--line)}
+.prog-row .prog-d{grid-column:1 / -1}
+.prog-form .btn{margin-top:18px}
+@media (max-width:760px){.prog-share{grid-template-columns:1fr}.prog-row{grid-template-columns:1fr}}
 @media print{
   .topbar-actions,.tools,.controls,.act,.flash{display:none !important}
   body{background:#fff}

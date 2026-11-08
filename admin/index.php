@@ -33,8 +33,11 @@ function page_head(string $title): void
         . '</head><body>';
 }
 
-function page_foot(bool $withScript): void
+function page_foot(bool $withScript, bool $withQr = false): void
 {
+    if ($withQr) {
+        echo '<script src="qrcode.js?v=' . (@filemtime(__DIR__ . '/qrcode.js') ?: 1) . '"></script>';
+    }
     if ($withScript) {
         $js = @filemtime(__DIR__ . '/admin.js') ?: 1;
         echo '<script src="admin.js?v=' . $js . '"></script>';
@@ -274,6 +277,37 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         redirect();
     }
 
+    if ($do === 'programme_save') {
+        $intro = clean_text($_POST['intro'] ?? '', 800, true);
+        $times = (array) ($_POST['time'] ?? []);
+        $titles = (array) ($_POST['title'] ?? []);
+        $details = (array) ($_POST['details'] ?? []);
+        $items = [];
+        foreach ($titles as $i => $title) {
+            $title = clean_text($title, 120);
+            if ($title === '') {
+                continue;
+            }
+            $items[] = [
+                'time'    => clean_text($times[$i] ?? '', 30),
+                'title'   => $title,
+                'details' => clean_text($details[$i] ?? '', 400, true),
+            ];
+            if (count($items) >= 40) {
+                break;
+            }
+        }
+        programme_save($intro, $items);
+        flash('ok', 'Programme saved (' . count($items) . ' item' . (count($items) === 1 ? '' : 's') . ').');
+        redirect();
+    }
+
+    if ($do === 'programme_newlink') {
+        programme_new_token();
+        flash('ok', 'New programme link created. The old link and old QR code no longer work.');
+        redirect();
+    }
+
     if ($do === 'password') {
         $cur = (string) ($_POST['current'] ?? '');
         $new = (string) ($_POST['new'] ?? '');
@@ -315,6 +349,12 @@ foreach ($rows as $r) {
     }
 }
 $latest = $rows ? format_ts((int) $rows[0]['ts']) : '—';
+$prog = programme_load();
+$progUrl = programme_url($prog['token']);
+$progRows = $prog['items'];
+for ($pad = max(3, 6 - count($progRows)); $pad > 0; $pad--) {
+    $progRows[] = ['time' => '', 'title' => '', 'details' => ''];
+}
 
 page_head('RSVP Admin — Dr Lerato Ngobeni');
 ?>
@@ -419,6 +459,44 @@ page_head('RSVP Admin — Dr Lerato Ngobeni');
       </form>
     </details>
 
+    <details class="panel" id="programme">
+      <summary>Programme page (hidden link &amp; QR code)</summary>
+      <p class="hint">A private page with the order of the evening. It is not linked from the invitation website and search engines cannot find it. Only people who have this link or scan the QR code can open it.</p>
+
+      <div class="prog-share">
+        <div class="qr-box"><canvas id="qr" width="220" height="220" data-url="<?= h($progUrl) ?>" role="img" aria-label="QR code for the programme page"></canvas></div>
+        <div class="prog-link">
+          <label for="prog-url">Programme link</label>
+          <input id="prog-url" type="text" readonly value="<?= h($progUrl) ?>">
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" id="copy-link">Copy link</button>
+            <a class="btn btn-ghost-dark" href="<?= h($progUrl) ?>" target="_blank" rel="noopener noreferrer">Open page</a>
+            <button type="button" class="btn btn-ghost-dark" id="dl-qr">Download QR (PNG)</button>
+          </div>
+          <form method="post" action="./" data-confirm="Create a new link? The current link and any QR codes already printed or shared will stop working.">
+            <?= csrf_field() ?><input type="hidden" name="do" value="programme_newlink">
+            <button class="btn-link danger" type="submit">Create a new link (disables the old one)</button>
+          </form>
+        </div>
+      </div>
+
+      <form method="post" action="./" class="prog-form">
+        <?= csrf_field() ?><input type="hidden" name="do" value="programme_save">
+        <label for="pg-intro">Welcome note (optional)</label>
+        <textarea id="pg-intro" name="intro" rows="3" maxlength="800" placeholder="A short message shown above the programme"><?= h($prog['intro']) ?></textarea>
+        <h3 class="prog-h">Order of the evening</h3>
+        <p class="hint">One item per row, in the order they happen. Leave a row empty to remove it. Save to add more empty rows.</p>
+        <?php foreach ($progRows as $n => $it) { ?>
+          <div class="prog-row">
+            <div><label for="pg-t<?= $n ?>">Time</label><input id="pg-t<?= $n ?>" name="time[]" maxlength="30" placeholder="e.g. 6:30 PM" value="<?= h($it['time'] ?? '') ?>"></div>
+            <div><label for="pg-n<?= $n ?>">What happens</label><input id="pg-n<?= $n ?>" name="title[]" maxlength="120" placeholder="e.g. Guests arrive" value="<?= h($it['title'] ?? '') ?>"></div>
+            <div class="prog-d"><label for="pg-d<?= $n ?>">Details (optional)</label><textarea id="pg-d<?= $n ?>" name="details[]" rows="2" maxlength="400"><?= h($it['details'] ?? '') ?></textarea></div>
+          </div>
+        <?php } ?>
+        <button class="btn btn-primary" type="submit">Save programme</button>
+      </form>
+    </details>
+
     <?php if ($user === 'admin') { ?>
     <details class="panel">
       <summary>Recent sign-in attempts</summary>
@@ -444,4 +522,4 @@ page_head('RSVP Admin — Dr Lerato Ngobeni');
   </section>
 </main>
 <?php
-page_foot(true);
+page_foot(true, true);

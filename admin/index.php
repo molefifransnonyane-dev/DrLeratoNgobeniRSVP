@@ -8,7 +8,7 @@ start_session();
 
 const IMPORT_MAX_BYTES = 2097152;
 
-function redirect(string $to = 'index.php'): void
+function redirect(string $to = './'): void
 {
     header('Location: ' . $to);
     exit;
@@ -165,7 +165,7 @@ if ($user === null || !isset(all_users()[$user])) {
     page_head('Sign in — RSVP Admin');
     ?>
     <main class="login-wrap">
-      <form class="login-card" method="post" action="index.php" autocomplete="on">
+      <form class="login-card" method="post" action="./" autocomplete="on">
         <span class="brand-mark brand-mark-lg" aria-hidden="true">LN</span>
         <h1>Dr Lerato Ngobeni</h1>
         <p class="sub">RSVP Admin &middot; Graduation Party</p>
@@ -324,8 +324,8 @@ page_head('RSVP Admin — Dr Lerato Ngobeni');
       <span class="brand-copy"><strong>Dr Lerato Ngobeni</strong><span>RSVP Admin &middot; 28 Nov 2026</span></span></div>
     <div class="topbar-actions">
       <span class="who">Signed in as <b><?= h($user) ?></b></span>
-      <a class="btn btn-ghost" href="index.php?a=export">Export CSV</a>
-      <form method="post" action="index.php"><?= csrf_field() ?><input type="hidden" name="do" value="logout"><button class="btn btn-ghost" type="submit">Sign out</button></form>
+      <a class="btn btn-ghost" href="./?a=export">Export CSV</a>
+      <form method="post" action="./"><?= csrf_field() ?><input type="hidden" name="do" value="logout"><button class="btn btn-ghost" type="submit">Sign out</button></form>
     </div>
   </div>
 </header>
@@ -379,7 +379,7 @@ page_head('RSVP Admin — Dr Lerato Ngobeni');
             <td data-label="Guests"><?= $isYes ? h($r['guests'] ?? '1') : '—' ?></td>
             <td data-label="Dietary" class="wrap-text"><?= ($r['dietary'] ?? '') !== '' ? nl2br(h($r['dietary'])) : '—' ?></td>
             <td data-label="Message" class="wrap-text"><?= ($r['message'] ?? '') !== '' ? nl2br(h($r['message'])) : '—' ?></td>
-            <td class="act"><form method="post" action="index.php" data-confirm="Delete the RSVP from <?= h($r['name']) ?>? This cannot be undone."><?= csrf_field() ?><input type="hidden" name="do" value="delete"><input type="hidden" name="id" value="<?= h($r['id']) ?>"><button class="btn-link danger" type="submit">Delete</button></form></td>
+            <td class="act"><form method="post" action="./" data-confirm="Delete the RSVP from <?= h($r['name']) ?>? This cannot be undone."><?= csrf_field() ?><input type="hidden" name="do" value="delete"><input type="hidden" name="id" value="<?= h($r['id']) ?>"><button class="btn-link danger" type="submit">Delete</button></form></td>
           </tr>
         <?php } ?>
         </tbody>
@@ -393,7 +393,7 @@ page_head('RSVP Admin — Dr Lerato Ngobeni');
     <details class="panel">
       <summary>Add an RSVP by hand</summary>
       <p class="hint">For guests who confirmed by phone or WhatsApp.</p>
-      <form method="post" action="index.php" class="grid-form">
+      <form method="post" action="./" class="grid-form">
         <?= csrf_field() ?><input type="hidden" name="do" value="add">
         <div><label for="a-name">Full name</label><input id="a-name" name="name" required maxlength="100"></div>
         <div><label for="a-phone">Phone</label><input id="a-phone" name="phone" type="tel" maxlength="40"></div>
@@ -409,7 +409,7 @@ page_head('RSVP Admin — Dr Lerato Ngobeni');
     <details class="panel">
       <summary>Import old RSVPs from Formspree</summary>
       <p class="hint">In Formspree, open the form, go to Submissions and export as CSV (or JSON), then upload that file here. Entries already in this list are skipped, so it is safe to import the same file twice.</p>
-      <form method="post" action="index.php" enctype="multipart/form-data" class="stack-form">
+      <form method="post" action="./" enctype="multipart/form-data" class="stack-form">
         <?= csrf_field() ?><input type="hidden" name="do" value="import">
         <label for="i-file">CSV or JSON file</label>
         <input id="i-file" type="file" name="file" accept=".csv,.json,text/csv,application/json">
@@ -433,7 +433,7 @@ page_head('RSVP Admin — Dr Lerato Ngobeni');
 
     <details class="panel">
       <summary>Change password</summary>
-      <form method="post" action="index.php" class="stack-form" autocomplete="off">
+      <form method="post" action="./" class="stack-form" autocomplete="off">
         <?= csrf_field() ?><input type="hidden" name="do" value="password">
         <label for="p-cur">Current password</label><input id="p-cur" name="current" type="password" autocomplete="current-password" required>
         <label for="p-new">New password (at least <?= MIN_PASSWORD ?> characters)</label><input id="p-new" name="new" type="password" autocomplete="new-password" minlength="<?= MIN_PASSWORD ?>" required>

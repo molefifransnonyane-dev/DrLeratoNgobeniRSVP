@@ -453,6 +453,23 @@ function try_login(string $user, string $pass): bool
     return $ok;
 }
 
+/* Short rolling log of sign-in attempts (never the password itself) so failures can be diagnosed. */
+function log_login(string $outcome, string $user, int $pwLen): void
+{
+    $entry = [
+        't'   => time(),
+        'u'   => $user,
+        'o'   => $outcome,
+        'len' => $pwLen,
+        'who' => substr(client_key(), 0, 6),
+        'ua'  => clean_text($_SERVER['HTTP_USER_AGENT'] ?? '', 90),
+    ];
+    json_file_update(data_dir() . '/login-log.json', function (&$data) use ($entry) {
+        array_unshift($data, $entry);
+        $data = array_slice($data, 0, 30);
+    });
+}
+
 /* ---------- misc ---------- */
 
 function send_security_headers(bool $isAdmin): void

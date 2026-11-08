@@ -140,14 +140,17 @@ $user = $_SESSION['user'] ?? null;
 if ($user === null || !isset(all_users()[$user])) {
     $error = '';
     if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+        $u = strtolower(clean_text($_POST['username'] ?? '', 40));
+        $p = (string) ($_POST['password'] ?? '');
         if (!csrf_ok()) {
             $error = 'Your session expired. Please try again.';
+            log_login('session-expired (cookie problem?)', $u, strlen($p));
         } elseif (rl_count('login', 900) >= 6) {
             $error = 'Too many sign-in attempts. Please wait 15 minutes and try again.';
+            log_login('locked-out', $u, strlen($p));
         } else {
-            $u = strtolower(clean_text($_POST['username'] ?? '', 40));
-            $p = (string) ($_POST['password'] ?? '');
             if (try_login($u, $p)) {
+                log_login('ok', $u, strlen($p));
                 rl_clear('login');
                 session_regenerate_id(true);
                 $_SESSION['user'] = $u;
@@ -155,6 +158,7 @@ if ($user === null || !isset(all_users()[$user])) {
                 redirect();
             }
             rl_hit('login', 900);
+            log_login(isset(all_users()[$u]) ? 'wrong-password' : 'unknown-username', $u, strlen($p));
             $error = 'That username or password is not right.';
         }
     }
@@ -414,6 +418,18 @@ page_head('RSVP Admin — Dr Lerato Ngobeni');
         <button class="btn btn-primary" type="submit">Import</button>
       </form>
     </details>
+
+    <?php if ($user === 'admin') { ?>
+    <details class="panel">
+      <summary>Recent sign-in attempts</summary>
+      <p class="hint">Usernames and outcomes only, never passwords. Newest first. "Who" is a short code that tells devices apart.</p>
+      <div class="table-wrap"><table class="rsvp-table"><thead><tr><th>When</th><th>Username typed</th><th>Result</th><th>Password length</th><th>Who</th><th>Browser</th></tr></thead><tbody>
+      <?php foreach (array_slice(json_file_read(data_dir() . '/login-log.json'), 0, 20) as $e) { ?>
+        <tr><td data-label="When" class="nowrap"><?= h(date('d M, H:i:s', (int) ($e['t'] ?? 0))) ?></td><td data-label="Username"><?= h($e['u'] ?? '') ?></td><td data-label="Result"><?= h($e['o'] ?? '') ?></td><td data-label="Length"><?= h($e['len'] ?? '') ?></td><td data-label="Who"><?= h($e['who'] ?? '') ?></td><td data-label="Browser" class="wrap-text"><?= h($e['ua'] ?? '') ?></td></tr>
+      <?php } ?>
+      </tbody></table></div>
+    </details>
+    <?php } ?>
 
     <details class="panel">
       <summary>Change password</summary>

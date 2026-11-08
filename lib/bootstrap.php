@@ -445,6 +445,11 @@ function try_login(string $user, string $pass): bool
     $users = all_users();
     $hash = $users[$user] ?? '$2y$11$abcdefghijklmnopqrstuuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
     $ok = password_verify($pass, $hash) && isset($users[$user]);
+    // Pasted passwords often carry a stray space or line break; accept those too.
+    $clean = trim($pass);
+    if (!$ok && $clean !== $pass && $clean !== '') {
+        $ok = password_verify($clean, $hash) && isset($users[$user]);
+    }
     return $ok;
 }
 

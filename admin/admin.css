@@ -43,6 +43,8 @@ textarea{resize:vertical}
   radial-gradient(900px 420px at 50% -10%,rgba(196,30,58,.16),transparent 70%),var(--off-white)}
 .login-card{width:min(100%,400px);background:var(--white);border:1px solid var(--line);border-radius:22px;padding:34px 30px 30px;box-shadow:var(--shadow);text-align:center}
 .login-card .brand-mark{margin:0 auto 14px}
+.login-card .show-pw{display:flex;align-items:center;gap:8px;margin:10px 0 0;font-weight:500;cursor:pointer}
+.login-card .show-pw input{width:auto;padding:0}
 .login-card h1{font-family:var(--serif);font-weight:600;font-size:1.9rem;color:var(--burgundy-deep)}
 .login-card .sub{color:var(--ink-soft);font-size:13px;margin:4px 0 20px}
 .login-card label{text-align:left}

@@ -171,11 +171,12 @@ if ($user === null || !isset(all_users()[$user])) {
         <input id="username" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus>
         <label for="password">Password</label>
         <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <label class="show-pw"><input type="checkbox" id="showpw"> Show password</label>
         <button class="btn btn-primary" type="submit">Sign in</button>
       </form>
     </main>
     <?php
-    page_foot(false);
+    page_foot(true);
     exit;
 }
 

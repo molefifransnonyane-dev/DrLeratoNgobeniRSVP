@@ -1,6 +1,13 @@
 (function () {
   'use strict';
 
+  var showpw = document.getElementById('showpw');
+  if (showpw) {
+    showpw.addEventListener('change', function () {
+      document.getElementById('password').type = showpw.checked ? 'text' : 'password';
+    });
+  }
+
   document.querySelectorAll('form[data-confirm]').forEach(function (f) {
     f.addEventListener('submit', function (e) {
       if (!window.confirm(f.getAttribute('data-confirm'))) e.preventDefault();

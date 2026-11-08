@@ -64,7 +64,7 @@ $mapsUrl = 'https://www.google.com/maps/search/?api=1&query=Courtyard%20Hotel%20
 
   <section class="event" aria-label="Event details">
     <div><span class="k">Date</span><span class="v">Saturday, 28 November 2026</span></div>
-    <div><span class="k">Time</span><span class="v">6:30 PM</span></div>
+    <div><span class="k">Time</span><span class="v">6:30 PM &ndash; 8:30 PM</span></div>
     <div><span class="k">Venue</span><span class="v">Courtyard Hotel Waterfall City<small>13 Karkloof Cres, Midrand, 2066</small></span></div>
     <div><span class="k">Dress code</span><span class="v">Elegant / Smart &mdash; Shades of Red</span></div>
     <a class="dir" href="<?= h($mapsUrl) ?>" target="_blank" rel="noopener noreferrer">Get directions</a>

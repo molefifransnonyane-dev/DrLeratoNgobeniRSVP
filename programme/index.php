@@ -7,7 +7,9 @@ header('X-Robots-Tag: noindex, nofollow, noarchive');
 header('Referrer-Policy: no-referrer');
 header('Cache-Control: private, no-store');
 header('X-Content-Type-Options: nosniff');
-header("Content-Security-Policy: default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'none'; base-uri 'none'; frame-ancestors 'none'");
+$printJs = "document.getElementById('print').addEventListener('click',function(){window.print()});";
+$printHash = base64_encode(hash('sha256', $printJs, true));
+header("Content-Security-Policy: default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'sha256-" . $printHash . "'; base-uri 'none'; frame-ancestors 'none'");
 
 function not_found(): void
 {
@@ -79,17 +81,25 @@ $mapsUrl = 'https://www.google.com/maps/search/?api=1&query=Courtyard%20Hotel%20
     <?php if (!$items) { ?>
       <p class="soon">The programme will be shared here soon.</p>
     <?php } else { ?>
-      <ol class="timeline">
-        <?php foreach ($items as $it) { ?>
-          <li>
-            <?php if (trim((string) ($it['time'] ?? '')) !== '') { ?><span class="t"><?= h($it['time']) ?></span><?php } else { ?><span class="t t-empty" aria-hidden="true"></span><?php } ?>
-            <div class="c">
+      <ol class="prog">
+        <?php foreach ($items as $it) {
+            $dur = trim((string) ($it['time'] ?? ''));
+            $who = trim((string) ($it['details'] ?? ''));
+            if ($dur === '' && $who === '') { ?>
+          <li class="feat"><h3><?= h($it['title']) ?></h3></li>
+        <?php } else { ?>
+          <li class="row">
+            <span class="no" aria-hidden="true"></span>
+            <div class="body">
               <h3><?= h($it['title']) ?></h3>
-              <?php if (trim((string) ($it['details'] ?? '')) !== '') { ?><p><?= nl2br(h($it['details'])) ?></p><?php } ?>
+              <?php if ($who !== '') { ?><p class="who"><?= nl2br(h($who)) ?></p><?php } ?>
             </div>
+            <?php if ($dur !== '') { ?><span class="dur"><?= h($dur) ?></span><?php } ?>
           </li>
-        <?php } ?>
+        <?php } } ?>
       </ol>
+      <p class="printrow"><button type="button" id="print" class="dir print-btn">Print programme</button></p>
+      <script><?= $printJs ?></script>
     <?php } ?>
   </section>
 

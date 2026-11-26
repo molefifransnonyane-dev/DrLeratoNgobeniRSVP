@@ -79,15 +79,15 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(2.8rem,12vw,4.2rem
   .order{margin-top:9px}
   .order h2{font-size:1.35rem;margin-bottom:7px}
   .order h2::after{margin-top:4px}
-  .prog{gap:4px}
-  .row{break-inside:avoid;box-shadow:none;padding:4px 14px 4px 16px;grid-template-columns:36px 1fr auto;border-radius:8px;gap:10px}
-  .row::before{top:6px;bottom:6px}
+  .prog{gap:3px}
+  .row{break-inside:avoid;box-shadow:none;padding:2px 14px 2px 16px;grid-template-columns:36px 1fr auto;border-radius:8px;gap:10px}
+  .row::before{top:5px;bottom:5px}
   .no::before{font-size:1.15rem}
-  .body h3{font-size:.98rem;line-height:1.2}
-  .who{font-size:.9rem;margin-top:0;line-height:1.2}
+  .body h3{font-size:.94rem;line-height:1.15}
+  .who{font-size:.86rem;margin-top:0;line-height:1.1}
   .dur{padding:2px 9px;font-size:9px}
-  .feat{break-inside:avoid;box-shadow:none;padding:6px;border-radius:8px}
-  .feat h3{font-size:1.15rem}
-  .feat::before{margin-bottom:3px}.feat::after{margin-top:3px}
+  .feat{break-inside:avoid;box-shadow:none;padding:4px;border-radius:8px}
+  .feat h3{font-size:1.05rem}
+  .feat::before{margin-bottom:2px}.feat::after{margin-top:2px}
   .foot{margin-top:7px;padding-top:6px;font-size:8.5px}
 }
